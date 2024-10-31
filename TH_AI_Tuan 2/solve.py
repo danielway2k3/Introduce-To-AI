@@ -6,7 +6,7 @@ from collections import deque
 
 
 # set it to bin folder of graphvviz
-os.environ["PATH"] += os.pathsep + 'usr/bin'
+os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin'
 
 
 # Dictionaries to backtrack solotion nodes
@@ -26,14 +26,14 @@ class Solution():
 
         self.start_state = (3, 3, 1)
         self.goal_state = (0, 0, 0)
-        self.options = [(1, 0), (0, 1), (1, 1), (0, 2), (2,0)]
+        self.options = [(1, 0), (0, 1), (1, 1), (0, 2), (2, 0)]
 
 
         self.boat_side = ["right", "left"]
 
 
-        self.graph= pydot.Dot(graph_type='graph', strict=False, bgcolor="#fff3af",
-                    label= "fig: Missionaries and Cannibal State Space Tree", fontcolor="red", fontsize= "24")
+        self.graph= pydot.Dot(graph_type='graph', bgcolor="#fff3af",
+                    label= "fig: Missionaries and Cannibals State Space Tree", fontcolor="red", fontsize= "24")
         self.visited = {}
         self.solved = False
         
@@ -54,6 +54,7 @@ class Solution():
         number_cannibals_right = 3 - number_cannibals
         return (number_missionaries > 0 and number_cannibals > number_missionaries) \
         or (number_missionaries_right > 0 and number_cannibals_right > number_missionaries_right)      
+    
     def write_image(self, file_name="state_space.png"):
         try:
             self.graph.write_png(file_name)
@@ -74,25 +75,25 @@ class Solution():
         """
         Utility method to draw legend on graph if legend flag is ON
         """
-        graphlegend = pydot.Cluster(graph_name="Legend", label="Legend", frontsize="20", color="gold",
-                                    frontclolor="blue", style="filled", fillcolor="#f4f4f4")
+        graphlegend = pydot.Cluster(graph_name="Legend", label="Legend", fontsize="20", color="gold",
+                                    fontcolor="blue", style="filled", fillcolor="#f4f4f4")
         
-        node1 = pydot.Node("1", styles="filled", fillcolor="blue", label="Start Node", frontcolor="white", width="2", fixedsize="true")
+        node1 = pydot.Node("1", style="filled", fillcolor="blue", label="Start Node", fontcolor="white", width="2", fixedsize="true")
         graphlegend.add_node(node1)
 
-        node2 = pydot.Node("2", styles="filled", fillcolor="red", label="Killed Node", frontcolor="black", width="2", fixedsize="true")
+        node2 = pydot.Node("2", style="filled", fillcolor="red", label="Killed Node", fontcolor="black", width="2", fixedsize="true")
         graphlegend.add_node(node2)
 
-        node3 = pydot.Node("3", styles="filled", fillcolor="yellow", label="Solution Node", width="2", fixedsize="true")
+        node3 = pydot.Node("3", style="filled", fillcolor="yellow", label="Solution Node", width="2", fixedsize="true")
         graphlegend.add_node(node3)
 
-        node4 = pydot.Node("4", styles="filled", fillcolor="gray", label="Can't be expanded", width="2", fixedsize="true")
+        node4 = pydot.Node("4", style="filled", fillcolor="gray", label="Can't be expanded", width="2", fixedsize="true")
         graphlegend.add_node(node4)
 
-        node5 = pydot.Node("5", syles="filled", fillcolor="green", label="Goal Node", width="2", fixedsize="true")
+        node5 = pydot.Node("5", style="filled", fillcolor="green", label="Goal Node", width="2", fixedsize="true")
         graphlegend.add_node(node5)
 
-        node7 = pydot.Node("7", styles="filled", fillcolor="gold", label="Node with child", width="2", fixedsize="true")
+        node7 = pydot.Node("7", style="filled", fillcolor="gold", label="Node with child", width="2", fixedsize="true")
         graphlegend.add_node(node7)
 
 
@@ -104,7 +105,7 @@ class Solution():
         \ncannibals to be moved from left to right \nif s == 1 and vice versa."
 
 
-        node6 = pydot.Node("6", styles="filled", fillcolor="gold", label=description, shape="plaintext", frontsize=20, frontcolor="red")
+        node6 = pydot.Node("6", style="filled", fillcolor="gold", label=description, shape="plaintext", fontsize=20, fontcolor="red")
         graphlegend.add_node(node6)
         
         self.graph.add_subgraph(graphlegend)
@@ -126,8 +127,8 @@ class Solution():
         right_m = emoji.emojize(f":old_man: " * number_missionaries_right)
         right_c = emoji.emojize(f":ogre: " * number_cannibals_right)
 
-        print('{}{}{}{}{}'.format(left_m, left_c, " " * (14 - len(left_m) - len(left_c)),\
-                                                                "_" * 40, " " * (12 - len(right_m) - len(right_c)) + right_m, right_c))
+        print('{}{}{}{}{}'.format(left_m, left_c + " " * (14 - len(left_m) - len(left_c)),\
+                                    "_" * 40, " " * (12 - len(right_m) - len(right_c)) + right_m, right_c))
         print("")
 
     def show_solution(self):
@@ -184,7 +185,7 @@ class Solution():
     def draw_edge(self, number_missionaries, number_cannibals, side, depth_level):
         u, v = None, None
         if Parent[(number_missionaries, number_cannibals, side)] is not None:
-            u = pydot.Node(str(Parent[(number_missionaries, number_cannibals, side)] + (depth_level - 1, )),
+            u = pydot.Node(str(Parent[(number_missionaries, number_cannibals, side)] + (depth_level - 1,)),
                             label=str(Parent[((number_missionaries, number_cannibals, side))]))
             self.graph.add_node(u)
 
@@ -194,7 +195,7 @@ class Solution():
             self.graph.add_node(v)
 
             edge = pydot.Edge(str(Parent[(number_missionaries, number_cannibals, side)] + (depth_level - 1,)),
-                                str((number_missionaries, number_cannibals, side)), dir="forward")
+                                str((number_missionaries, number_cannibals, side, depth_level)), dir="forward")
             self.graph.add_edge(edge)
         else:
             # For start node
@@ -205,7 +206,7 @@ class Solution():
         
     def bfs(self):
         q = deque()
-        q.append(self.start_state + (0,))
+        q.append(self.start_state + (0, ))
         self.visited[self.start_state] = True
         
         while q:
@@ -227,7 +228,7 @@ class Solution():
             elif self.number_of_cannibals_exceeds(number_missionaries, number_cannibals):
                 v.set_style("filled")
                 v.set_fillcolor("red")
-                return False
+                continue
             else:
                 v.set_style("filled")
                 v.set_fillcolor("orange")
