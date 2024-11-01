@@ -21,12 +21,17 @@ Khởi tạo không gian trạng thái(độ sâu là 20):
 ```bash
 python generate_full_space_tree.py -d 20
 ```
+Sau đó ta sẽ có được ảnh như bên dưới:
+![image alt](https://github.com/danielway2k3/Introduce-To-AI/blob/main/TH_AI_Tuan%202/state_space_20.png?raw=true)
+
 Xây dựng tìm kiếm bằng thuật toán DFS:
 ```bash
 python main.py -m dfs -l true
 ```
+![image alt](https://github.com/danielway2k3/Introduce-To-AI/blob/main/TH_AI_Tuan%202/dfs_legend.png?raw=true)
+
 Xây dựng tìm kiếm bằng thuật toán BFS:
 ```bash
 python main.py -m bfs -l true
 ```
-
+![image alt](https://github.com/danielway2k3/Introduce-To-AI/blob/main/TH_AI_Tuan%202/bfs.png?raw=true)
