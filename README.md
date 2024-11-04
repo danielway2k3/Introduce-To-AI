@@ -35,3 +35,5 @@ Xây dựng tìm kiếm bằng thuật toán BFS:
 python main.py -m bfs -l true
 ```
 ![image alt](https://github.com/danielway2k3/Introduce-To-AI/blob/main/TH_AI_Tuan%202/bfs.png?raw=true)
+
+Tuơng tự cho các thư mục của những tuần khác...
