@@ -99,7 +99,7 @@ class Solution():
 
         description = "Each node (m, c, s) represents a \nstate where 'm' is the number of\n missionaries,\ 'c' is the cannibals \
             and \n's' is the side of the boat\n"
-        " Where 'l' represents the left \nside and '0' the right side \n\nOur objective is to reach goal state (0, 0, 0)\
+        " Where '1' represents the left \nside and '0' the right side \n\nOur objective is to reach goal state (0, 0, 0)\
         \nfrom start state (3, 3, 1) by some \noperations = [(1, 0), (0, 1), (2, 0), (0, 2), (1, 1)]\n"\
                 "Each tuple (x, y) inside operators \nrepresents the number of missionaries and\
         \ncannibals to be moved from left to right \nif s == 1 and vice versa."
