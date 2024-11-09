@@ -82,26 +82,46 @@ def GBFS(startNode, heuristic, graph, goalNode):
 
 def AStar(startNode, heuristics, graph, goalNode):
     priorityQueue = queue.PriorityQueue()
-    distance = 0
-    path = []
+    g_cost = {startNode: 0}  # Giá trị g cho mỗi nút
+    parent = {startNode: None}  # Để lưu trữ đường đi
+    priorityQueue.put((heuristics[startNode], startNode))
 
-    priorityQueue.put((heuristics[startNode] + distance, [startNode, 0]))
+    open_set = set([startNode])  
+    closed_set = set() 
 
-    while priorityQueue.empty() == False:
-        current = priorityQueue.get()[1]
-        path.append(current[0])
-        distance += int(current[1])
+    while not priorityQueue.empty():
+        # Lấy nút có f nhỏ nhất từ OPEN
+        current_cost, current_node = priorityQueue.get()
 
-        if current[0] == goalNode:
-            break
+        # Nếu là đích thì trả về đường đi
+        if current_node == goalNode:
+            path = []
+            while current_node:
+                path.append(current_node)
+                current_node = parent[current_node]
+            return path[::-1]  # Trả về đường đi từ startNode đến goalNode
 
-        priorityQueue = queue.PriorityQueue()
+        # Đưa current_node vào CLOSE
+        closed_set.add(current_node)
 
-        for i in graph[current[0]]:
-            if i[0] not in path:
-                priorityQueue.put((heuristics[i[0]] + int(i[1]) + distance, i))
+        # Mở rộng các nút kề của current_node
+        for neighbor, cost in graph[current_node]:
+            if neighbor in closed_set:
+                continue  # Bỏ qua nếu đã nằm trong CLOSE
 
-    return path
+            tentative_g = g_cost[current_node] + int(cost)
+
+            # Nếu neighbor chưa có trong OPEN hoặc tìm thấy g thấp hơn
+            if neighbor not in open_set or tentative_g < g_cost.get(neighbor, float('inf')):
+                g_cost[neighbor] = tentative_g
+                f_cost = tentative_g + heuristics[neighbor]
+                parent[neighbor] = current_node
+                priorityQueue.put((f_cost, neighbor))
+                open_set.add(neighbor)  # Thêm neighbor vào OPEN nếu chưa có
+
+    return []  # Trả về rỗng nếu không tìm thấy đường đi
+
+
     
 def drawMap(city, gbfs, astar, graph):
     for i, j in city.items():
@@ -160,4 +180,3 @@ if __name__ == "__main__":
         print("Astar => ", astar)
 
         drawMap(city, gbfs, astar, graph)
-        
