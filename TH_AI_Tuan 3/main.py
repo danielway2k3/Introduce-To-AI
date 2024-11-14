@@ -90,10 +90,8 @@ def AStar(startNode, heuristics, graph, goalNode):
     closed_set = set() 
 
     while not priorityQueue.empty():
-        # Lấy nút có f nhỏ nhất từ OPEN
         current_cost, current_node = priorityQueue.get()
 
-        # Nếu là đích thì trả về đường đi
         if current_node == goalNode:
             path = []
             while current_node:
@@ -101,13 +99,11 @@ def AStar(startNode, heuristics, graph, goalNode):
                 current_node = parent[current_node]
             return path[::-1]  # Trả về đường đi từ startNode đến goalNode
 
-        # Đưa current_node vào CLOSE
         closed_set.add(current_node)
 
-        # Mở rộng các nút kề của current_node
         for neighbor, cost in graph[current_node]:
             if neighbor in closed_set:
-                continue  # Bỏ qua nếu đã nằm trong CLOSE
+                continue  
 
             tentative_g = g_cost[current_node] + int(cost)
 
@@ -117,9 +113,9 @@ def AStar(startNode, heuristics, graph, goalNode):
                 f_cost = tentative_g + heuristics[neighbor]
                 parent[neighbor] = current_node
                 priorityQueue.put((f_cost, neighbor))
-                open_set.add(neighbor)  # Thêm neighbor vào OPEN nếu chưa có
+                open_set.add(neighbor) 
 
-    return []  # Trả về rỗng nếu không tìm thấy đường đi
+    return []  
 
 
     
